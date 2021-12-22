@@ -1,9 +1,7 @@
 <template>
   <nav>
     <ul>
-      <li><router-link to="courses">Dashboard</router-link></li>
-      <li class="link"><router-link to="quiz">Quiz</router-link></li>
-      <li class="link"><router-link to="fragen">Fragen</router-link></li>
+      <li><router-link to="/courses">Dashboard</router-link></li>
       <li class="align-right" v-if="getAuth().currentUser">
         <button @click="logout">Logout</button>
       </li>
