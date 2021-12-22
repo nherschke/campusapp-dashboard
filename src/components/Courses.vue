@@ -4,6 +4,8 @@
     <div class="grid-item" v-for="course in courses" :key="course.id">
       <h2>{{ course.name }}</h2>
       <h3>{{ course.room }}</h3>
+      <router-link :to="`/courses/${course.id}/quiz`">Quiz</router-link>
+      <router-link :to="`/courses/${course.id}/fragen`">Fragen</router-link>
     </div>
   </div>
 </template>
