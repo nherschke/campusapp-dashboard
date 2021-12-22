@@ -17,12 +17,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/quiz',
+    path: '/courses/:id/quiz',
     component: () => import('@/components/Quiz.vue'),
     meta: { requiresAuth: true }
   },
   {
-    path: '/fragen',
+    path: '/courses/:id/fragen',
     component: () => import('@/components/Fragen.vue'),
     meta: { requiresAuth: true }
   }
