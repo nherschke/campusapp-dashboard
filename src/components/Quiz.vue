@@ -12,7 +12,7 @@
       >
         <p>{{ quiz.createdAt.toDate().toLocaleDateString('de-DE') }}</p>
         <h2>{{ quiz.question }}</h2>
-        <h3>{{ quiz.answer }}</h3>
+        <h3>{{ quiz.choices === 'yesno' ? 'Ja/Nein' : 'A/B/C/D' }}</h3>
       </div>
     </div>
   </div>
