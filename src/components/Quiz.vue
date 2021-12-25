@@ -8,12 +8,12 @@
       <div
         class="grid-item" v-for="quiz in quizzes"
         :key="quiz.id"
-        :style="quiz.status === 'inactive' ? 'background: #fda172;' : ''"
+        :style="quiz.active ? 'background: #fda172;' : ''"
       >
         <p>{{ quiz.createdAt.toDate().toLocaleDateString('de-DE') }}</p>
         <h2>{{ quiz.question }}</h2>
         <h3>{{ quiz.choices === 'yesno' ? 'Ja/Nein' : 'A/B/C/D' }}</h3>
-        <button v-if="quiz.status === 'active'" @click="stop(quiz.id)">Stoppen</button>
+        <button v-if="quiz.active" @click="stop(quiz.id)">Stoppen</button>
       </div>
     </div>
   </div>
@@ -80,7 +80,7 @@ export default {
       await updateDoc(
         doc(getFirestore(), `courses/${courseId}/quizzes`, quizId),
         {
-          status: 'inactive'
+          active: false
         }
       )
     }
@@ -92,7 +92,8 @@ export default {
         {
           question,
           choices,
-          status: 'active',
+          active: true,
+          published: false,
           createdAt: Timestamp.now()
         }
       )
