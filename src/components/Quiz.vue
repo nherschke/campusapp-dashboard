@@ -13,6 +13,7 @@
         <p>{{ quiz.createdAt.toDate().toLocaleDateString('de-DE') }}</p>
         <h2>{{ quiz.question }}</h2>
         <h3>{{ quiz.choices === 'yesno' ? 'Ja/Nein' : 'A/B/C/D' }}</h3>
+        <button v-if="quiz.status === 'active'" @click="stop(quiz.id)">Stoppen</button>
       </div>
     </div>
   </div>
@@ -44,8 +45,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { collection, getDocs, getFirestore, addDoc, Timestamp } from 'firebase/firestore'
+import { onUnmounted, ref } from 'vue'
+import { collection, getFirestore, addDoc, Timestamp, updateDoc, doc, onSnapshot } from 'firebase/firestore'
 import { useRoute } from 'vue-router'
 
 export default {
@@ -61,19 +62,28 @@ export default {
     const route = useRoute()
     const courseId = route.params.id
 
-    /** 
-     * Reads quizzes from database
-     */
-    const getQuizzes = () => {
-      getDocs(collection(getFirestore(), `courses/${courseId}/quizzes`))
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            quizzes.value.push({ id: doc.id, ...doc.data() })
-          })
+    const unsubscribe = onSnapshot(
+      collection(getFirestore(), `courses/${courseId}/quizzes`),
+      querySnapshot => {
+        quizzes.value = []
+        querySnapshot.forEach(doc => {
+          quizzes.value.push({ id: doc.id, ...doc.data() })
         })
-    }
+      }
+    )
+    onUnmounted(() => unsubscribe())
 
-    getQuizzes()
+    /**
+     * Sets the status of a quiz as inactive
+     */
+    const stop = async (quizId) => {
+      await updateDoc(
+        doc(getFirestore(), `courses/${courseId}/quizzes`, quizId),
+        {
+          status: 'inactive'
+        }
+      )
+    }
 
     const onSubmit = async (question, choices) => {
       // Add quiz to database
@@ -86,10 +96,6 @@ export default {
           createdAt: Timestamp.now()
         }
       )
-      // Reset quizzes ref
-      quizzes.value = []
-      // Get all quizzes
-      getQuizzes()
       // Turn off creation mode
       create.value = false
     }
@@ -99,6 +105,7 @@ export default {
       quizzes,
       question,
       picked,
+      stop,
       onSubmit
     }
   }
