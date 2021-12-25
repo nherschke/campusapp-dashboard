@@ -14,6 +14,7 @@
         <h2>{{ quiz.question }}</h2>
         <h3>{{ quiz.choices === 'yesno' ? 'Ja/Nein' : 'A/B/C/D' }}</h3>
         <button v-if="quiz.active" @click="stop(quiz.id)">Stoppen</button>
+        <button @click="deleteQuiz(quiz.id)">Löschen</button>
       </div>
     </div>
   </div>
@@ -46,7 +47,7 @@
 
 <script>
 import { onUnmounted, ref } from 'vue'
-import { collection, getFirestore, addDoc, Timestamp, updateDoc, doc, onSnapshot } from 'firebase/firestore'
+import { collection, getFirestore, addDoc, Timestamp, updateDoc, doc, onSnapshot, deleteDoc } from 'firebase/firestore'
 import { useRoute } from 'vue-router'
 
 export default {
@@ -85,6 +86,13 @@ export default {
       )
     }
 
+    /**
+     * Deletes a quiz
+     */
+    const deleteQuiz = async (quizId) => {
+      await deleteDoc(doc(getFirestore(), `courses/${courseId}/quizzes`, quizId))
+    }
+
     const onSubmit = async (question, choices) => {
       // Add quiz to database
       await addDoc(
@@ -107,6 +115,7 @@ export default {
       question,
       picked,
       stop,
+      deleteQuiz,
       onSubmit
     }
   }
