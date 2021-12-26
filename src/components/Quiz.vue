@@ -111,18 +111,21 @@ export default {
       await deleteDoc(doc(getFirestore(), `courses/${courseId}/quizzes`, quizId))
     }
 
-    const onSubmit = async (question, choices) => {
+    const onSubmit = async (_question, choices) => {
       // Add quiz to database
       await addDoc(
         collection(getFirestore(), `courses/${courseId}/quizzes`),
         {
-          question,
+          question: _question,
           choices,
           active: true,
           published: false,
           createdAt: Timestamp.now()
         }
       )
+      // Empty input fields
+      question.value = ''
+      picked.value = ''
       // Turn off creation mode
       create.value = false
     }
