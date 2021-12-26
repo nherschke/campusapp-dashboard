@@ -6,15 +6,21 @@
     </span>
     <div class="grid">
       <div
-        class="grid-item" v-for="quiz in quizzes"
+        v-for="quiz in quizzes"
         :key="quiz.id"
-        :style="quiz.active ? 'background: #fda172;' : ''"
+        :class="'grid-item' + (quiz.active ? ' active' : (quiz.published ? ' inactive' : ' unpublished'))"
       >
+        <p>
+          <b v-if="quiz.active">Aktiv</b>
+          <b v-else-if="quiz.published">Veröffentlicht</b>
+          <b v-else>Unveröffentlicht</b>
+        </p>
         <p>{{ quiz.createdAt.toDate().toLocaleDateString('de-DE') }}</p>
         <h2>{{ quiz.question }}</h2>
         <h3>{{ quiz.choices === 'yesno' ? 'Ja/Nein' : 'A/B/C/D' }}</h3>
         <button v-if="quiz.active" @click="stop(quiz.id)">Stoppen</button>
         <button @click="deleteQuiz(quiz.id)">Löschen</button>
+        <button v-if="!quiz.active && !quiz.published" @click="publish(quiz.id)">Veröffentlichen</button>
       </div>
     </div>
   </div>
@@ -87,6 +93,18 @@ export default {
     }
 
     /**
+     * Publishes a quiz
+     */
+    const publish = async (quizId) => {
+      await updateDoc(
+        doc(getFirestore(), `courses/${courseId}/quizzes`, quizId),
+        {
+          published: true
+        }
+      )
+    }
+
+    /**
      * Deletes a quiz
      */
     const deleteQuiz = async (quizId) => {
@@ -115,6 +133,7 @@ export default {
       question,
       picked,
       stop,
+      publish,
       deleteQuiz,
       onSubmit
     }
@@ -134,8 +153,19 @@ div.grid {
 
 div.grid-item {
   color: #fff;
-  background: #fa8128;
   border-radius: 7px;
   padding: 10px 0;
+}
+
+div.active {
+  background: #fa8128;
+}
+
+div.inactive {
+  background: #fda172;
+}
+
+div.unpublished {
+  background: #444;
 }
 </style>
