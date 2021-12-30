@@ -10,12 +10,12 @@
         :key="quiz.id"
         :class="'grid-item' + (quiz.active ? ' active' : (quiz.published ? ' inactive' : ' unpublished'))"
       >
+        <p>{{ quiz.createdAt.toDate().toLocaleDateString('de-DE') }}</p>
         <p>
           <b v-if="quiz.active">Aktiv</b>
           <b v-else-if="quiz.published">Veröffentlicht</b>
           <b v-else>Unveröffentlicht</b>
         </p>
-        <p>{{ quiz.createdAt.toDate().toLocaleDateString('de-DE') }}</p>
         <h2>{{ quiz.question }}</h2>
         <h3>{{ quiz.choices === 'yesno' ? 'Ja/Nein' : 'A/B/C/D' }}</h3>
         <button v-if="quiz.active" @click="stop(quiz.id)">Stoppen</button>
