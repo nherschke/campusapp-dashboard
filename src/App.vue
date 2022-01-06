@@ -2,7 +2,7 @@
   <nav>
     <ul>
       <li><router-link to="/courses">Dashboard</router-link></li>
-      <li class="align-right" v-if="getAuth().currentUser">
+      <li class="align-right" v-if="loggedIn">
         <button @click="logout">Logout</button>
       </li>
     </ul>
@@ -11,22 +11,35 @@
 </template>
 
 <script>
-import { getAuth, signOut } from 'firebase/auth'
+import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'vue-router'
+import { ref } from '@vue/reactivity'
+import { onUnmounted } from '@vue/runtime-core'
 
 export default {
   name: 'App',
   components: {},
   setup() {
     const router = useRouter()
+    const loggedIn = ref(false)
+
+    const unsubscribe = onAuthStateChanged(getAuth(), user => {
+      if (user) {
+        loggedIn.value = true
+      } else {
+        loggedIn.value = false
+      }
+    })
 
     const logout = () => {
       signOut(getAuth())
       router.replace('/login')
     }
 
+    onUnmounted(() => unsubscribe())
+
     return {
-      getAuth,
+      loggedIn,
       logout
     }
   }
