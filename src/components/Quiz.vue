@@ -98,16 +98,23 @@ export default {
     }
 
     const onSubmit = async (_question, choices) => {
+      const quiz = {
+        question: _question,
+        choices,
+        active: true,
+        createdAt: Timestamp.now(),
+        voted: [],
+        votes: {}
+      }
+
+      if (choices === 'yesno') {
+        quiz.votes = { 'yes': 0, 'no': 0}
+      } else {
+        quiz.votes = { 'a': 0, 'b': 0, 'c': 0, 'd': 0 }
+      }
+
       // Add quiz to database
-      await addDoc(
-        collection(getFirestore(), `courses/${courseId}/quizzes`),
-        {
-          question: _question,
-          choices,
-          active: true,
-          createdAt: Timestamp.now()
-        }
-      )
+      await addDoc(collection(getFirestore(), `courses/${courseId}/quizzes`), quiz)
       // Empty input fields
       question.value = ''
       picked.value = ''
