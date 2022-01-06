@@ -4,8 +4,20 @@
     <div class="grid-item" v-for="course in courses" :key="course.id">
       <h2>{{ course.name }}</h2>
       <h3>{{ course.room }}</h3>
-      <router-link :to="`/courses/${course.id}/quiz`">Quiz</router-link>
-      <router-link :to="`/courses/${course.id}/fragen`">Fragen</router-link>
+      <div style="margin: 20px 0;">
+        <router-link
+          class="link"
+          :to="`/courses/${course.id}/quiz`"
+        >
+          Quiz
+        </router-link>
+        <router-link
+          class="link"
+          :to="`/courses/${course.id}/fragen`"
+        >
+          Fragen
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -50,5 +62,13 @@ div.grid-item {
   background: #fa8128;
   border-radius: 7px;
   padding: 10px 0;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+  background-color: #fda172;
+  margin: 0 5px;
+  padding: 10px;
 }
 </style>
