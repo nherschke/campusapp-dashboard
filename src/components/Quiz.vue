@@ -24,26 +24,34 @@
   </div>
   <div v-else>
     <form @submit.prevent="onSubmit(question, picked)">
-      <label for="question">Frage</label>
-      <input type="text" v-model="question" required>
-      <p>Wahlmöglichkeiten</p>
-      <input
-        type="radio"
-        name="choices"
-        id="yesno"
-        value="yesno"
-        v-model="picked"
-        required
+      <label class="label" for="question">Frage</label>
+      <input type="text" id="question" v-model="question" required>
+      <label class="label">Wahlmöglichkeiten</label>
+      <label
+        class="form-control"
+        for="yesno"
       >
-      <label for="yesno">Ja/Nein</label>
-      <input
-        type="radio"
-        name="choices"
-        id="abcd"
-        value="abcd"
-        v-model="picked"
+        <input
+          type="radio"
+          name="choices"
+          id="yesno"
+          value="yesno"
+          v-model="picked"
+          required
+        >Ja/Nein
+      </label>
+      <label
+        class="form-control"
+        for="abcd"
       >
-      <label for="abcd">A/B/C/D</label>
+        <input
+          type="radio"
+          name="choices"
+          id="abcd"
+          value="abcd"
+          v-model="picked"
+        >A/B/C/D
+      </label>
       <input type="submit">
     </form>
   </div>
@@ -157,5 +165,45 @@ div.active {
 
 div.inactive {
   background: #fda172;
+}
+
+form {
+  width: 50%;
+  margin: 0 auto;
+}
+
+label.label {
+  font-size: 24px;
+  display: inline-block;
+  margin: 10px 0;
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 20px;
+}
+
+.form-control {
+  font-family: system-ui, sans-serif;
+  font-size: 18px;
+  display: block;
+}
+
+input[type=submit] {
+  font-size: 20px;
+  width: 100%;
+  background-color: #fa8128;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>
