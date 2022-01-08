@@ -206,4 +206,15 @@ input[type=submit] {
   border-radius: 4px;
   cursor: pointer;
 }
+
+button {
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #fa8128;
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
 </style>
