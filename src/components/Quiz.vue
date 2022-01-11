@@ -17,8 +17,19 @@
         </p>
         <h2>{{ quiz.question }}</h2>
         <h3>{{ quiz.choices === 'yesno' ? 'Ja/Nein' : 'A/B/C/D' }}</h3>
-        <button v-if="quiz.active" @click="stop(quiz.id)">Stoppen</button>
-        <button @click="deleteQuiz(quiz.id)">Löschen</button>
+        <button
+          v-if="quiz.active"
+          @click="stop(quiz.id)"
+          class="button-secondary"
+        >
+          Stoppen
+        </button>
+        <button
+          @click="deleteQuiz(quiz.id)"
+          :class="quiz.active ? 'button-secondary' : ''"
+        >
+          Löschen
+        </button>
       </div>
     </div>
   </div>
@@ -212,9 +223,14 @@ button {
   font-weight: bold;
   background-color: #fa8128;
   color: white;
-  padding: 15px;
+  margin: 5px;
+  padding: 10px;
   border: none;
   border-radius: 7px;
   cursor: pointer;
+}
+
+button.button-secondary {
+  background-color: #fda172;
 }
 </style>
